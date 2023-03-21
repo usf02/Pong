@@ -2,7 +2,7 @@ import pygame
 
 
 class Paddle:
-    VEL = 6
+    VEL = 4
     WIDTH = 20
     HEIGHT = 100
 
@@ -11,7 +11,7 @@ class Paddle:
         self.y = self.original_y = y
 
     def draw(self, win):
-        pygame.draw.rect(win, (255, 255, 255), (self.x, self.y, self.width, self.height))
+        pygame.draw.rect(win, (255, 255, 255), (self.x, self.y, self.WIDTH, self.HEIGHT))
 
     def move(self, up=True):
         if up:

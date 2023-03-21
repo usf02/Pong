@@ -3,7 +3,7 @@ import random
 import math
 
 class Ball:
-    MAX_VEL = 7
+    MAX_VEL = 5
     RADIUS = 7
 
     def __init__(self, x, y):
@@ -20,6 +20,7 @@ class Ball:
         angle = 0
         while angle in excluded:
             angle = math.radians(random.randrange(min_angle, max_angle))
+            return angle
 
     def draw(self, win):
         pygame.draw.circle(win, (255, 255, 255), (self.x, self.y), self.RADIUS)

@@ -26,7 +26,7 @@ class Game:
 
         self.left_paddle = Paddle(10, self.window_height//2 - Paddle.HEIGHT//2)
         self.right_paddle = Paddle(
-            self.window_width//2 - 10 - Paddle.WIDTH//2, self.window_height//2 - Paddle.HEIGHT//2)
+            self.window_width - 10 - Paddle.WIDTH, self.window_height//2 - Paddle.HEIGHT//2)
         self.ball = Ball(self.window_width//2, self.window_height//2)
 
         self.left_score = 0
@@ -35,20 +35,15 @@ class Game:
         self.right_hits = 0
 
     def _draw_score(self):
-        left_score_text = self.SCORE_FONT.render(
-            f"{self.left_score}", 1, self.WHITE)
-        right_score_text = self.SCORE_FONT.render(
-            f"{self.right_score}", 1, self.WHITE)
-        self.window.blit(left_score_text, (self.window_width //
-                         4 - left_score_text.get_width()//2, 20))
-        self.window.blit(right_score_text, (3*self.window_width //
-                         4 - right_score_text.get_width()//2, 20))
+        left_score_text = self.SCORE_FONT.render(f"{self.left_score}", 1, self.WHITE)
+        right_score_text = self.SCORE_FONT.render(f"{self.right_score}", 1, self.WHITE)
+        self.window.blit(left_score_text, (self.window_width//4 - left_score_text.get_width()//2, 20))
+        self.window.blit(right_score_text, (3*self.window_width//4 - right_score_text.get_width()//2, 20))
 
     def _draw_hits(self):
         hits_text = self.SCORE_FONT.render(
             f"{self.left_hits + self.right_hits}", 1, self.RED)
-        self.window.blit(hits_text, (self.window_width //
-                         2 - hits_text.get_width()//2, 10))
+        self.window.blit(hits_text, (self.window_width - hits_text.get_width() - 10, 10))
 
     def _draw_divider(self):
         for i in range(10, self.window_height, self.window_height//20):
@@ -56,22 +51,6 @@ class Game:
                 continue
             pygame.draw.rect(
                 self.window, self.WHITE, (self.window_width//2 - 5, i, 10, self.window_height//20))
-
-    def draw(self, draw_score=True, draw_hits=False):
-        self.window.fill(self.BLACK)
-
-        self._draw_divider
-
-        if draw_score:
-            self._draw_score
-
-        if draw_hits:
-            self._draw_hits
-
-        for paddle in [self.left_paddle, self.right_paddle]:
-            paddle.draw(self.window)
-
-        self.ball.draw(self.window)
 
     def _handle_collision(self):
         ball = self.ball
@@ -104,6 +83,22 @@ class Game:
                     y_vel = difference_in_y / reduction_factor
                     ball.y_vel = y_vel * -1
                     self.right_hits += 1
+                    
+    def draw(self, draw_score=True, draw_hits=False):
+        self.window.fill(self.BLACK)
+
+        self._draw_divider()
+
+        if draw_score:
+            self._draw_score()
+
+        if draw_hits:
+            self._draw_hits()
+
+        for paddle in [self.left_paddle, self.right_paddle]:
+            paddle.draw(self.window)
+
+        self.ball.draw(self.window)
 
     def move_paddle(self, left=True, up=True):
         if left:
@@ -132,8 +127,7 @@ class Game:
             self.ball.reset()
             self.left_score += 1
 
-        game_info = GameInformation(
-            self.left_hits, self.right_hits, self.left_score, self.right_score)
+        game_info = GameInformation(self.left_hits, self.right_hits, self.left_score, self.right_score)
 
         return game_info
 
